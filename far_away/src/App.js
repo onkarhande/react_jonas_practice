@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 const initialItems = [
   { id: 1, description: "Passports", quantity: 2, packed: false },
   { id: 2, description: "Socks", quantity: 12, packed: false },
@@ -19,15 +21,17 @@ function Logo() {
 }
 
 function Form() {
+  const [description, setDescription] = useState('');
+  const [no_items, setNo_items] = useState(0);
 
-  function handleSubmit(e){
+  function handleSubmit(e) {
     e.preventDefault();
   }
 
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip</h3>
-      <select>
+      <select >
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => {
           return (
             <option value={num} key={num}>
@@ -36,7 +40,7 @@ function Form() {
           );
         })}
       </select>
-      <input type="text"></input>
+      <input type="text" placeholder="item..." value={description} onInput={(e) => setDescription(e.target.value)}></input>
       <button>Add</button>
     </form>
   );
@@ -67,7 +71,7 @@ function Stats() {
 
 function Item({ item }) {
   return (
-    <li>
+    <li key={item.id}>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
