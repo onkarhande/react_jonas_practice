@@ -22,19 +22,27 @@ function Logo() {
 
 function Form() {
   const [description, setDescription] = useState('');
-  const [no_items, setNo_items] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    if (!description) return;
+    let newItem = { id: Date.now(), description, quantity, packed: false };
+
+    console.log(newItem);
+
+    setQuantity(1);
+    setDescription("");
   }
 
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your 😍 trip</h3>
-      <select >
+      <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))}>
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => {
           return (
-            <option value={num} key={num}>
+            <option value={num} key={num} >
               {num}
             </option>
           );
