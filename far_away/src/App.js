@@ -6,12 +6,18 @@ const initialItems = [
 ];
 
 function App() {
+  const [items, setItems] = useState([]);
+
+  function handleAddItems(item) {
+    setItems((items) => [...items, item]);
+  }
+
   return (
     <div className="App">
       <Logo></Logo>
-      <Form></Form>
-      <PackingList></PackingList>
-      <Stats></Stats>
+      <Form onAddItem={handleAddItems}></Form>
+      <PackingList items={items}></PackingList>
+      <Stats items={items}></Stats>
     </div>
   );
 }
@@ -20,7 +26,7 @@ function Logo() {
   return <h1>🌴 Far Away 👜</h1>;
 }
 
-function Form() {
+function Form({ onAddItem }) {
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState(1);
 
@@ -30,8 +36,7 @@ function Form() {
     if (!description) return;
     let newItem = { id: Date.now(), description, quantity, packed: false };
 
-    console.log(newItem);
-
+    onAddItem(newItem);
     setQuantity(1);
     setDescription("");
   }
@@ -54,11 +59,11 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
+        {items.map((item) => (
           <Item item={item}></Item>
         ))}
       </ul>
@@ -66,11 +71,11 @@ function PackingList() {
   );
 }
 
-function Stats() {
+function Stats({ items }) {
   return (
     <footer className="stats">
       <em>
-        👜 You have {initialItems.length} items on your list, and you have
+        👜 You have {items.length} items on your list, and you have
         already packed X (X%)
       </em>
     </footer>
