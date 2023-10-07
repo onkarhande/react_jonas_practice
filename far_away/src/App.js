@@ -68,26 +68,64 @@ function Form({ onAddItem }) {
 }
 
 function PackingList({ items, handleDeleteItem, handleToggleItem }) {
+  const [sortBy, setSortBy] = useState('packed');
+
+  let sortedItems;
+
+  if (sortBy === 'input') {
+    sortedItems = items;
+  }
+  else if (sortBy === 'description') {
+    sortedItems = items.slice().sort((a, b) => a.description.localeCompare(b.description));
+  }
+  else if (sortBy === 'packed') {
+    sortedItems = items.slice()
+      .sort((a, b) => Number(a.packed) - Number(b.packed));
+  }
+  else {
+    sortedItems = items;
+  }
+
+  console.log(sortBy);
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItems.map((item) => (
           <Item item={item} onDeleteItem={handleDeleteItem} onToggleItem={handleToggleItem}></Item>
         ))}
       </ul>
+
+      <div className='actions'>
+        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <option value="input">Sort by input order</option>
+          <option value="description">Sort by description</option>
+          <option value="packed">Sort by packed status</option>
+        </select>
+      </div>
     </div>
   );
 }
 
 function Stats({ items }) {
+
+  if (!items.length) {
+    return (
+      <footer className="stats">
+        <em>
+          Start adding some items in your packing list ✈
+        </em>
+      </footer>
+    );
+  }
+
   const totalItems = items.length;
   const packedItems = items.filter(o => o.packed).length;
-  const percentage = Math.round(packedItems / totalItems);
+  let percentage = Math.round(packedItems / totalItems * 100);
+  console.log(packedItems, totalItems, percentage);
   return (
     <footer className="stats">
-      <em>
-        👜 You have {totalItems} items on your list, and you have
-        already packed {packedItems} ({percentage}%)
+      <em>{percentage === 100 ? 'You got everything... Ready to go 🚀' : `👜 You have ${totalItems} items on your list, and you have
+        already packed ${packedItems} (${percentage}%)`}
       </em>
     </footer>
   );
