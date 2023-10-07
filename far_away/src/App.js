@@ -80,11 +80,14 @@ function PackingList({ items, handleDeleteItem, handleToggleItem }) {
 }
 
 function Stats({ items }) {
+  const totalItems = items.length;
+  const packedItems = items.filter(o => o.packed).length;
+  const percentage = Math.round(packedItems / totalItems);
   return (
     <footer className="stats">
       <em>
-        👜 You have {items.length} items on your list, and you have
-        already packed X (X%)
+        👜 You have {totalItems} items on your list, and you have
+        already packed {packedItems} ({percentage}%)
       </em>
     </footer>
   );
