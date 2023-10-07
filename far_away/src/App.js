@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
-];
+// const initialItems = [
+//   { id: 1, description: "Passports", quantity: 2, packed: false },
+//   { id: 2, description: "Socks", quantity: 12, packed: false },
+// ];
 
 function App() {
   const [items, setItems] = useState([]);
@@ -12,11 +12,19 @@ function App() {
     setItems((items) => [...items, item]);
   }
 
+  function handleDeleteItem(id) {
+    setItems((items) => items.filter(item => { return item.id !== id }))
+  }
+
+  function handleToggleItem(id) {
+    setItems(items => items.map(item => item.id === id ? { ...item, packed: !item.packed } : item));
+  }
+
   return (
     <div className="App">
       <Logo></Logo>
       <Form onAddItem={handleAddItems}></Form>
-      <PackingList items={items}></PackingList>
+      <PackingList items={items} handleDeleteItem={handleDeleteItem} handleToggleItem={handleToggleItem}></PackingList>
       <Stats items={items}></Stats>
     </div>
   );
@@ -59,12 +67,12 @@ function Form({ onAddItem }) {
   );
 }
 
-function PackingList({ items }) {
+function PackingList({ items, handleDeleteItem, handleToggleItem }) {
   return (
     <div className="list">
       <ul>
         {items.map((item) => (
-          <Item item={item}></Item>
+          <Item item={item} onDeleteItem={handleDeleteItem} onToggleItem={handleToggleItem}></Item>
         ))}
       </ul>
     </div>
@@ -82,13 +90,14 @@ function Stats({ items }) {
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem, onToggleItem }) {
   return (
     <li key={item.id}>
+      <input type='checkbox' value={item.packed} onChange={() => onToggleItem(item.id)}></input>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity} {item.description}
       </span>
-      <button>❌</button>
+      <button onClick={() => { onDeleteItem(item.id) }}>❌</button>
     </li>
   );
 }
