@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import './StarRating.css'
 
-export default function StarRating({ maxRating = 5, color = '#fcc419', size = 48 }) {
-    const [rating, setRating] = useState(0);
+export default function StarRating({ maxRating = 5, color = '#fcc419', size = 48, onSetRating, defaultRating = 0 }) {
+    const [rating, setRating] = useState(defaultRating);
     const [tempRating, setTempRating] = useState(0);
-
     const textStyle = {
         color,
         fontSize: `${size / 1.5}px`,
@@ -15,6 +14,7 @@ export default function StarRating({ maxRating = 5, color = '#fcc419', size = 48
     function handleRate(rating) {
         setRating(rating);
         // console.log(rating)
+        onSetRating(rating);
     }
 
     return (
