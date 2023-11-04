@@ -45,12 +45,16 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
         async function getMovieDetails() {
             let res = await fetch(`http://www.omdbapi.com/?apikey=43d6dbab&i=${selectedId}`);
             const data = await res.json();
-            // console.log(data);
             setMovie(data);
             setIsLoading(false);
         }
         getMovieDetails();
     }, [selectedId]);
+
+    useEffect(function () {
+        if (!title) return;
+        document.title = `Movie | ${title}`
+    }, [title])
 
     return (
         <div className="details">

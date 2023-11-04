@@ -13,7 +13,6 @@ export default function StarRating({ maxRating = 5, color = '#fcc419', size = 48
 
     function handleRate(rating) {
         setRating(rating);
-        // console.log(rating)
         onSetRating(rating);
     }
 
