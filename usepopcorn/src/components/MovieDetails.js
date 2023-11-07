@@ -56,6 +56,19 @@ export default function MovieDetails({ selectedId, onCloseMovie, onAddWatched, w
         document.title = `Movie | ${title}`
     }, [title])
 
+    useEffect(function () {
+        let onEscapePress = (e) => {
+            if (e.code === 'Escape') {
+                onCloseMovie();
+            }
+        }
+        document.addEventListener('keydown', onEscapePress)
+
+        return function () {
+            document.removeEventListener('keydown', onEscapePress);
+        }
+    }, [onCloseMovie])
+
     return (
         <div className="details">
             {isLoading ? <Loader></Loader> :

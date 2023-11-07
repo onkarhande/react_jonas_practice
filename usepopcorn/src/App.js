@@ -53,12 +53,12 @@ const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => Number((acc + cur / arr.length).toFixed(1)), 0);
 
 export default function App() {
-  const [query, setQuery] = useState("interstellar");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [selectedId, setSelectedId] = useState("tt0816692");
+  const [selectedId, setSelectedId] = useState("");
 
   function handleSelectMovie(id) {
     setSelectedId(selectedId => selectedId === id ? null : id);
@@ -108,7 +108,6 @@ export default function App() {
     fetchData();
 
     return function () {
-      console.log('aborted');
       controller.abort();
     }
 
